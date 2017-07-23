@@ -10,6 +10,7 @@ ctrl+shift+V:文本复制的历史记录.    展示本地历史记录：  local hisory-> show hist
 比较两个文件:选择两个文件，按下快捷键ctrl+D 
 
 http://www.phperz.com/article/17/0409/333066.html
+http://blog.csdn.net/senvil/article/details/50972433
 
 ctrl+N 搜索类
 ctr+空格 补全类名
