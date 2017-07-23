@@ -1,0 +1,195 @@
+一、git基础指令
+二、git配置文件及git config指令
+三、把文件存入文档库(git add, git rm， git reset)
+四、比较文件的差异和从Git文档库中取回文件(git diff, git checkout, git grep, git mv， git stash, git gc)
+五、获取Git文档库统计数据和绘制统计图表(git log,git shortlog, git ls-files)
+六、建立分支、合并和解决冲突(git branch, git checkout)
+七、 合并程序项目的分支和解决冲突(git merge, cherry-pick, git revert)
+八、使用Rebase指令更新分支的起始点(git rebase)
+
+
+一、git基础指令
+git help -a : 完整的指令列表 ; 指令太长，\加enter换行
+git commit -m '这次操作的说明' --author='操作者姓名<email邮箱>'
+git commit --amend -m '新的操作说明' --author='操作者姓名<email邮箱>'  ; 修改操作说明或是操作者的资料.
+gitk 启动图形查看模式
+git add指令后可以逐一列出文件名称（用空格符隔开）,也可指定文件夹名称,也可以使用通配符*.
+git add  poem.txt->更新Git系统的索引->git commit...->文件库(repository)
+
+二、git配置文件及git config指令
+git配置文件（优先级从高到低）：
+[1]文件夹中".git"子文件夹内的congfig文件.(仅对它所在的文档库有效)
+[2]登录账号的home directory中的config文件（只对此账号登录的用户有效）
+[3]Git安装文件夹中的etc\gitconfig文件.(对所有登录账号以及所有git文档库都有效)
+
+git config指令
+[1]git config -l:按优先级从低到高显示配置信息.
+   git config --system -l:显示Git程序安装文件中的etc\gitconfig文件内的设置.
+   git config --global -l:显示登录账号内的.gitconfig文件内的设置.
+[2]git config user.name '操作者姓名' 
+   git config user.email '操作者email'； 记录在文档库的配置文件.
+   
+   git config --global user.name '操作者姓名'
+   git config --global user.email '操作者email'：记录在登录账号home directory中的.gitconfig文件内.
+   git config --system user.name '操作者姓名': 记录在Git程序安装文件夹中的etc\gitConfig文件内.
+   
+   git config --unset user.name : 删除文档库配置文件中的操作者姓名.
+   
+[3]git commit -m = git commit --message.
+   git config alias.指令别名 ‘正式的指令或选项’ : 设置指令别名，简化指令.
+   git config alias.con 'config -l':  git con 等同于 git config -l
+   git config unset alias.con：删除指令别名.
+   
+[4]git config --global core.editor notepad： 修改默认的编辑器和文件对比程序.
+   diff --git a/poem.txt b/poem.txt  # a/文件名表示在文档库或者索引中的文件，b/文件名表示在文件夹内的文件.
+   
+   配置文件对比程序:
+   git config --global diff.tool kdiff3
+   git config --global difftool.kdiff3.cmd \  #'\'表示指令还没完成.
+   "'D:/Program FIles/KDiff3/kdiff3.exe'\"\$LOCAL\"\"\$REMOTE\""
+   git config --global difftool.prompt false    #关闭提示功能.可省略.
+   设置好以后执行git difftool，就会启动KDiff3程序，并且显示文件对比结果.
+   
+三、把文件存入文档库(git add, git rm， git reset)
+
+Git会将文件和文件夹分为三类：tracked(被追踪的)、ignored(忽略的)、untracked(不被追踪的).
+touch .gitignore :可以在git bash程序中执行以下指令来创建.gitignore文件。影响范围是它所在的文件夹和所有的子文件夹，每个文件夹都可以创建。
+可以使用通配符*,如*.txt。还可以使用!来排除，如!note.txt.
+
+git rm 文件名：
+两项检查：
+[1]Git索引中有没有该文件内容(刚刚有没有执行过git add 文件名)，如果有，表示这个文件的内容和文档库中的不一样。->放弃执行.
+[2]文件夹中的内容是否和数据库中的一样，如果不一样，git会提示然后放弃执行。
+如果通过以上两项检查，Git会马上删除文件夹中的文件，然后在索引中记录要从文档库中删除该文件（git status）,再执行git commit,从文档库中删除该文件.
+
+git rm --cached 文件名: 文档库中状态从tracked变成untracked,Git索引中这个文件的内容也会被删除，但是不会从文件夹中删除这个文件。
+
+git reset 选项 commit节点标识符或是标签:
+[1]--soft:只有文档库中的数会改变.
+[2]--mixed: Git索引会恢复到指定节点的状态，但文件夹中的文件不会受到影响.
+[3]--hard: 文档库、索引、文件夹都会恢复到指定节点的状态.
+
+所以，如果git add 文件名 后反悔
+[1]文档库中还没加入任何文件，使用 git rm --cached文件名.
+[2]文档库中已经有文件，git reset HEAD 文件名. 默认选项是git reset --mixed HEAD 文件名.
+
+四、比较文件的差异和从Git文档库中取回文件(git diff, git checkout, git grep, git mv， git stash, git gc)
+对比各个版本文件的差异:
+[1]对比文件夹中的两个文件： git diff/difftool --no-index 文件1 文件2
+[2]对比文件夹和Git系统的索引： git diff/difftool 文件名
+[3]对比文件夹和commit节点： git diff/difftool commit节点 文件名
+[4]对比Git索引和文档库:git diff/difftool --cached 文件名
+[5]对比两个commit版本的文件： git diff/difftool commit节点1 commit节点2 文件名
+如果要对比全部文件： git diff HEAD HEAD^ . ;或者直接省略文件名
+
+从Git文档库中取出文件
+git checkout commit节点标识符或标签 文件1 文件2 ..:从文档库中的任何一个commit节点取出文件（文件夹中的文件会被取出的文件覆盖）。
+如果取出的文件和当前文档库最新commit的文件内容不同，会自动记录在git索引中.
+
+git checkout 文件1 文件2：Git会先找索引中有没有该文件，如果有就取出，如果没有，从最新的commit开始往前寻找，取出第一个找到的版本
+如果要取出文档库中全部文件的最新版本，可以执行git checkout .
+
+git grep '要找的字符串' commit节点   #搜索指定commit节点中的文件。
+git grep -e '要找的字符串1' -e '要找的字符串2' commit节点
+git grep -e '要找的字符串1' --and -e '要找的字符串2' commit节点
+
+git blame -L 起始行， 结束行， 文件名  : 文件中每一行最后由谁修改.
+
+git mv 原来的文件名 新文件名  #更改文件夹中的文件名，并把它记录在Git索引中，接着执行git commit指令，就可以更新文档库.
+
+暂存当前文件夹的文件状态：
+git stash save
+[1]存储文件夹中被Git追踪的文件和文档库中最新文件版本的差异；
+[2]把文件夹中被Git追踪的文件，还原成文档库中最新的文件版本。
+git stash list  #显示当前文档库中最新的commit节点标识符和说明.
+把文件夹中的文件恢复成执行“git stash save”指令时的状态：
+[1]先从文档库中取出执行“git stash list”所显示的commit版本，git checkout commit标识符 .。
+[2]执行git stash pop 或是 git stash apply取出暂存的文件，并且合并到当前文件夹中的文件。
+
+清理Git文档库 git gc
+[1]--aggressive: 比较仔细的方式检查及清理.
+[2]--auto:判断文档库是否需要清理，。
+[3]--no-prune:要求不要清楚文档库中不会用到的数据，只要“整理”它们即可。
+
+五、获取Git文档库统计数据和绘制统计图表(git log,git shortlog, git ls-files)
+git log指令  : 按照时间顺序往前列出每一次commit的数据.
+git log --author='A'  #以大写字母A开头的人所执行的commit
+git log 文件名1 文件名2....   # 只显示更改过某些文件的commit。
+git log --after/since='2015-02-18 9:30' --before/until='2015-02-18 21:50'
+git log --shortstat/--stat/--numstat : 可以显示每一次commit的变更情况.
+
+git shortlog: 按照名字的字母顺序，列出每一个人执行commit的次数和说明.
+
+git ls-files:列出当前Git文档中的文件列表，可以搭配xargs和wc两个工具，计算文件中的程序代码行数.
+如 git ls-files | xargs wc -l
+   git ls-files | xargs cat | wc -l  # 计算总行数.
+   
+六、建立分支、合并和解决冲突(git branch, git checkout)
+git branch 创建分支名称 (commit节点或标识符):如果指定了commit节点和标识符，就会从该节点长出分支.
+git checkout 分支名称： 切换分支.
+git checkout -b 新分支名称 (commit节点或标识符):等同于上面两条指令.
+git branch --list bug/*：会显示所有以bug/开头的分支.
+
+gitk -all: 显示所有分支.
+git log --graph --oneline --all -- decorate
+
+git branch -d 要删除的分支名称.  -D ：确定删除还没有合并的分支.
+git branch -m 新的分支名称  #更改分支名称.
+
+Detached HEAD问题
+git checkout commit节点；
+git checkout commmit节点 . #两个指令都会让文件夹中的文件变成指定的commit节点的版本。但第一个指令还会让当前分支的HEAD指向该节点。
+如 git checkout HEAD^ ， 把HEAD标签移到旧节点上，此时Git就不是在任何一个分支上运行了。如果此时修改文件，并且执行commit，会在当前
+所在的节点上长出一个没有名称的分支。
+
+
+七、 合并程序项目的分支和解决冲突(git merge, cherry-pick, git revert)
+git merge 分支名称
+git checkout A
+git merge B.  把B合并到A上。
+合并后反悔   git reset --hard HEAD^ ;  合并后的HEAD节点会有两个父节点，可分别HEAD^1, HEAD^2表示。
+合并： 从被合并的分支中，复制新的文件内容到当前的分支. 
+
+如果合并过程中发生冲突（如两个分支都修改了文件中相同的位置）,想要放弃合并:  git merge--abort. 
+
+cherry-pick 指令:  针对commit节点，而不是分支进行合并.
+git cherry-pick commit节点或标签  #把某一个commit节点的文件版本合并到文件夹中的文件.若不想创建新的commit节点，加上-n选项。
+注意执行这个指令之前，文件夹中被修改的文件存入文档库.
+如果发生冲突 [1]放弃合并： git cherry-pick --abort [2]修改冲突后，git add .;git cherry-pick --continue
+
+处理Detached HEAD状态和Revert Commit节点
+处理Detached：
+git branch 无名分支的分支名称； git checkout master; git merge 无名分支的分支名称.
+
+git revert commit节点   # 回到指定commit节点的前一个节点的文件状态，git reset --hard commit节点 则是回到指定commit节点的文件状态
+revert指令不会删除Git文档库中的commit节点。
+执行revert时，可能会碰到发生冲突的情况， git revert --abort取消revert.  git checkout 指令不会导致冲突的情况.
+
+八、使用Rebase指令更新分支的起始点(git rebase)
+将主分支的修改合并到开发中的分支：  git checkout draft; git merge master.
+开发过程中不断合并，最后master和draft分支会互相交织。为了让演进图变得更简单，可以使用rebase代替merge指令.
+git rebase与merge区别： 原来从commit节点长出来的draft分支，会变成从master分支最新的commit节点长出来，避免两个分支互相交织.
+
+git checkout draft; git rebase master.
+若发生冲突，修改冲突文件后 git add .; git rebase --continue.
+发生冲突后若想放弃 git rebase --abort.
+
+rebase从头到尾执行完以后反悔
+git reflog HEAD或任何分支的名称: 列出HEAD变动的历史记录.
+git reset --hard HEAD@{3}.
+
+
+
+
+ 
+
+
+   
+   
+
+
+
+
+
+   
+   
