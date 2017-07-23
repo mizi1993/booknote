@@ -1,0 +1,18 @@
+ctrl+alt+V: 对象属性或方法调用转换为本地变量.
+ctrl+alt+C:  数值->常量
+ctrl+alt+F: 变量->对象属性.
+ctrl+alt+P: 变量-> 方法参数.
+crl+alt+M:变量或者表达式->方法
+ctrl+alt+N： 方法实现代码->调用处.
+
+ctrl+shift+V:文本复制的历史记录.    展示本地历史记录：  local hisory-> show history.
+
+比较两个文件:选择两个文件，按下快捷键ctrl+D 
+
+http://www.phperz.com/article/17/0409/333066.html
+
+
+
+
+
+
