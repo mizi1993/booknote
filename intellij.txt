@@ -11,6 +11,72 @@ ctrl+shift+V:文本复制的历史记录.    展示本地历史记录：  local hisory-> show hist
 
 http://www.phperz.com/article/17/0409/333066.html
 
+ctrl+N 搜索类
+ctr+空格 补全类名
+Alt+F7    find usages
+ctl+Q 看类或者方法的文档
+ctrl+鼠标左键   看类的注释
+ctrl+F12    navigate|file structure
+shift+F6  refactor|rename
+
+ctrl+o  覆盖基类的方法
+ctrl+I   实现接口的方法
+
+code completion 时可以使用Tab键确定选择的方法 与Enter键的功能不同 
+
+shift+click  close tabs??
+alt+insert  生成getter/setter方法
+alt+F1  select the currently edited element in any view
+
+ESC失去焦点
+shift+ESC 讲光标移到editor并关闭当前的窗口.
+F12将光标移到最后的窗口
+
+ctrl+shift+空格 new后代码补全
+ctrl+Alt+B 导航到抽象方法的实现.
+ctrl+alt+T surround with
+
+ctrl+w entended selection
+ctrl+alt+v :    extract variable refactoring. 
+
+
+ctrl+/: //
+ctrl+shift+/ :  /* ... */
+
+shift+F1: open browser with documentation for the element.
+
+类名后ctrl+空格 可以推荐变量名.
+ctr+P : 方法的有效参数列表.
+ctrl+shift+backspace 导航到上一次修改代码的位置
+
+alt+Q  查看当前方法的注释.
+
+F2/shift+F2: 在语法错误中间跳转.highlighted syntax errors.
+ctrl+alt+上箭头:  在编译错误信息中跳转查看操作结果。
+ 
+ctrl+J 自动完成有效的live template的缩写.
+Alt+上箭头/下箭头：  在方法间切换.
+
+
+ctrl+shift+J  code style
+ctrl+shift+v: 插入最新剪贴板的内容到文本里面.
+ctrl+H  hierarchy for the currently edited class.
+
+ctrl+Q quick documentation
+ctrl+P:  parameter info
+ctrl+B:  navigate|declaration.
+
+ctrl+alt+shift+N: Navigate|Symbol
+
+
+alt+shift+C : recent changes
+
+ctrl+后引号  : quick switch scheme
+ctrl+shift+Enter 完成当前的statement,如if,do-while, try-catch,teturn.
+
+
+shift+F6 :重命名类.
+
 
 
 
